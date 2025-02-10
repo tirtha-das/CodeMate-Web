@@ -1,16 +1,23 @@
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios"
 import { BASE_URL } from "../utlis/constant";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser } from "../utlis/userSlice";
 
 
 
 
 const Navbar = function(){
    const navigate = useNavigate();
+   const user = useSelector((store)=>store.user);
+   const dispatch = useDispatch();
+   //console.log(user);
+   
 
    const handleLogout = async function(){
     try{
       await axios.post(BASE_URL+"/logout",{},{withCredentials:true});
+      dispatch(removeUser());
       navigate("/login");
     }catch(err){
       console.error(err.message);
@@ -19,21 +26,25 @@ const Navbar = function(){
       
     }
      
-   }
+   }  
+
+    //if(!user) return 
 
     return(
         <div className="navbar bg-base-300 mr-4">
         <div className="flex-1">
           <Link to="/" className="btn btn-ghost text-xl bg-base-100">CodeMate</Link>
         </div>
-        <div className="flex-none gap-2">
-         
+        {user && <div className="flex-none gap-2 flex justify-between items-center">
+        <h1>{`Welcome ${user.firstName}`}</h1>
           <div className="dropdown dropdown-end">
+          
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+            
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                  src={user.photoURL} />
               </div>
             </div>
             <ul
@@ -45,7 +56,7 @@ const Navbar = function(){
               <li><a onClick={handleLogout}>Logout</a></li>
             </ul>
           </div>
-        </div>
+        </div>}
       </div>
     )
 }

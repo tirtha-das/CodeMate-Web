@@ -1,7 +1,43 @@
+import { useEffect } from "react";
+import { BASE_URL } from "../utlis/constant";
 import Navbar from "./Navbar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios"
+import { useDispatch } from "react-redux";
+import { addUser } from "../utlis/userSlice";
 
 const Body = function(){
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const isUserLoggedIn = async function(){
+        try{
+            if(location.pathname==="/error"){
+                navigate("/login");
+                return;
+            }
+        const userData = await axios.get(BASE_URL+"/profile/view",{withCredentials:true})
+        dispatch(addUser(userData?.data?.data));
+       
+        
+
+        navigate(`${location.pathname}`);
+        }catch(err){
+            if(err.status===401){
+            navigate("/login");
+            }
+            else{
+                navigate("/error");
+            }
+        }
+        
+    }
+
+    useEffect(()=>{
+        isUserLoggedIn();
+    },[])
+
     return (
         <>
          <Navbar/>

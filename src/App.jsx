@@ -6,11 +6,14 @@ import PendingRequest from "./components/PendingRequest.jsx"
 import Friends from "./components/Friends.jsx";
 import Feed from "./components/Feed.jsx";
 import Error from "./components/Error.jsx"
+import appStore from "./utlis/appStore.js"
+import { Provider } from "react-redux"
 
 function App() {
   
 
   return (
+    <Provider store={appStore}>
    <BrowserRouter>
      <Routes>
       <Route path="/" element={<Body/>}>
@@ -22,7 +25,8 @@ function App() {
        <Route path="/error" element={<Error/>}/>
       </Route>
      </Routes>
-   </BrowserRouter>)
+   </BrowserRouter>
+   </Provider>)
      
 }
 
