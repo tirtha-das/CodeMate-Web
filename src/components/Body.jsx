@@ -14,6 +14,7 @@ const Body = function(){
     const isUserLoggedIn = async function(){
         try{
             if(location.pathname==="/error"){
+               await axios.post(BASE_URL+"/logout",{},{withCredentials:true});
                 navigate("/login");
                 return;
             }
