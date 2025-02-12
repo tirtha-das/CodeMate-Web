@@ -8,7 +8,7 @@ import UserCard from "./UserCard";
 const Feed = function(){
     const dispatch = useDispatch();
      const feedData = useSelector((store)=>store.feed);
-     console.log(feedData);
+     //console.log(feedData);
      
     const getFeedData = async function(){
         const feedData = await axios.get(BASE_URL+"/user/feed",{withCredentials:true});

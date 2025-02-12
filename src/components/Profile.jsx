@@ -1,16 +1,18 @@
 import { useSelector } from "react-redux";
-import UserCard from "./UserCard";
+
+import EditProfile from "./EditProfile";
 
 
 
 const Profile = function(){
     const userInfo = useSelector(store=>store.user);
-
-    return (
-        <div className="flex justify-center">
-         {userInfo && <UserCard userInfo={userInfo}/>}
-         </div>
-    )
+    //console.log(userInfo);
+    
+    
+   return (!userInfo)?<div>loading</div>:
+      <div>
+        <EditProfile user={userInfo}/>
+      </div>
 }
 
 export default Profile;

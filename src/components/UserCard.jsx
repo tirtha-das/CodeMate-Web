@@ -6,6 +6,10 @@ import { removeUserFromFeed } from "../utlis/feedSlice";
 
 
 const UserCard = function({userInfo}){
+  // console.log("Hello");
+  // console.log(userInfo);
+  
+  
    const {firstName,lastName,age,gender,about,photoURL,_id} = userInfo;
    const navigate = useNavigate();
    const dispatch = useDispatch();
@@ -25,24 +29,26 @@ const UserCard = function({userInfo}){
 
 
     return (
-        <div className="card bg-base-300 w-1/3 shadow-xl rounded-3xl my-10">
-        <figure className="px-5 pt-7 w-full">
-          <img
-            src={photoURL}
-            alt="FeedUser"
-            className="rounded-xl w-2/3" />
-        </figure>
-        <div className="card-body items-center text-center">
-          <h2 className="card-title text-3xl font-bold">{firstName+" "+lastName}</h2>
-           {age && gender && <p className="text-xl">{age+","+gender}</p>}
-          {about && <p className="text-xl mb-3">{about}</p>}
-          {_id &&<div className="card-actions mt-3">
+      <div className={"card bg-base-300 w-1/3 shadow-xl rounder-lg my-10"}>
+  <figure className="mt-2">
+    <img
+      src={photoURL}
+      alt="user-photo" />
+  </figure>
+  <div className="card-body items-center break-words overflow-hidden">
+    <h2 className="card-title break-words overflow-hidden">{firstName+" "+lastName}</h2>
+    <p>
+      {age && <span>{age+","}</span>}
+      {gender && <span>{gender}</span>}
+    </p>
+    <p className="break-words overflow-hidden">{about}</p>
+    {_id &&<div className="card-actions mt-3">
           <button className="btn btn-primary text-2xl px-3 py-2 mx-3 rounded-lg"
            onClick={()=>{handleInvitation("ignored")}}>Ignore</button>
             <button className="btn btn-secondary text-2xl px-3 py-2 mx-3 rounded-lg" onClick={()=>{handleInvitation("interested")}}>Invite</button>
         </div>}
-        </div>
-      </div>
+  </div>
+</div>
     )
 }
 

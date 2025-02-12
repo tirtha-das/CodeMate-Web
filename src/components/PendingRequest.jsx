@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utlis/constant";
-import ProfileCard from "./ProfileCard";
+import ProfileCard,{ WrappedPendingProfile } from "./ProfileCard";
 import axios from "axios"
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {addRequests} from "../utlis/requestSlice"
-import { usingPendingTag } from "./ProfileCard";
 import { removeRequest } from "../utlis/requestSlice";
 
 
@@ -14,7 +13,7 @@ const  PendingRequest = function(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const pendingRequestLists = useSelector(store=>store.requests);
-    const PendingProfileCard = usingPendingTag(ProfileCard);
+    const PendingProfileCard =  WrappedPendingProfile(ProfileCard);
 
 
     const handleReviewRequest = async function(id,status){
@@ -40,7 +39,7 @@ const  PendingRequest = function(){
 
             dispatch(addRequests(response?.data?.data));
         }catch(err){
-            console.error(err.message);
+            //console.error(err.message);
             navigate("/error");
             
         }

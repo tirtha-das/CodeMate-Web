@@ -1,5 +1,5 @@
 
-import React from "react";
+
 
 const ProfileCard = function({userInfo}){
 
@@ -23,36 +23,42 @@ const ProfileCard = function({userInfo}){
 }
 
 
-export const usingPendingTag = (ProfileCard)=>{
-  const wrappedPendingProfile = React.memo(function(props){
-    const {userInfo,handleReviewRequest} = props;
-    // const navigate = useNavigate();
-    // const dispatch = useDispatch();
+export const WrappedPendingProfile = (ProfileCard) => {
+  return (props) => {
+    const { userInfo, handleReviewRequest } = props;
 
     return (
       <div className="flex w-1/2 items-center bg-base-300 rounded-2xl justify-around my-3">
-        <ProfileCard {...props}/>
+        <ProfileCard {...props} />
         <div className="card-actions mx-3">
-           <button className="btn btn-secondary text-xl font-bold"
-            onClick={()=>{
-              handleReviewRequest(userInfo._id,"accepted");
-            }}>Accept</button>
-           <button className="btn btn-primary text-xl font-bold"
-              onClick={()=>{
-                handleReviewRequest(userInfo._id,"rejected");
-              }}>Reject</button>
-         </div>
+          <button
+            className="btn btn-secondary text-xl font-bold"
+            onClick={() => {
+              handleReviewRequest(userInfo._id, "accepted");
+            }}
+          >
+            Accept
+          </button>
+          <button
+            className="btn btn-primary text-xl font-bold"
+            onClick={() => {
+              handleReviewRequest(userInfo._id, "rejected");
+            }}
+          >
+            Reject
+          </button>
+        </div>
       </div>
-    )
-  })
-  wrappedPendingProfile.displayName = "PendingProfileCard";
-  return wrappedPendingProfile;
-}
+    );
+  };
+
+};
 
 
 
-export function usingFriendTag(ProfileCard){
-  const wrappedFriendProfile = React.memo(function (props){
+
+export const WrappedFriendProfile=(ProfileCard)=>{
+ return (props)=>{
    // const {userInfo} = props;
     //console.log(userInfo);
     
@@ -66,9 +72,7 @@ export function usingFriendTag(ProfileCard){
       </div>
     )
   }
-  )
-  wrappedFriendProfile.displayName = "FriendProfileCard";
-  return wrappedFriendProfile;
+  
 }
 
 
