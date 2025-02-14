@@ -7,10 +7,10 @@ import { addUser } from "../utlis/userSlice";
 
 const Login = function(){
 
-    const [emailId,setEmailId] = useState("tirtha123@gmail.com");
-    const [password,setPassword] = useState("Tirtha@123");
-    const [firstName,setFirstName] = useState("Tirtha");
-    const [lastName,setLastName] = useState("Das");
+    const [emailId,setEmailId] = useState("anwita123@gmail.com");
+    const [password,setPassword] = useState("Anwita@123");
+    const [firstName,setFirstName] = useState("");
+    const [lastName,setLastName] = useState("");
     const [showSignUpForm,setShowSignUpForm] = useState(false);
     const [errorMessage,setErrorMessage] = useState("");
     const navigate = useNavigate();

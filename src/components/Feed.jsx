@@ -23,7 +23,7 @@ const Feed = function(){
   
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-10 rounded-3xl">
         { (feedData.length === 0)?<h1>Feed is Empty</h1>
           :<UserCard userInfo={feedData[0]}/>}
       </div> 

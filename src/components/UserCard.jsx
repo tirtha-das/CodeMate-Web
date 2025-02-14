@@ -16,7 +16,6 @@ const UserCard = function({userInfo}){
    const handleInvitation = async function(status){
      try{
         const response = await axios.post(BASE_URL+"/request/send/"+status+"/"+_id,{},{withCredentials:true});
-        console.log(response);
         dispatch(removeUserFromFeed(_id));
         
      }catch(err){
@@ -29,19 +28,19 @@ const UserCard = function({userInfo}){
 
 
     return (
-      <div className={"card bg-base-300 w-1/3 shadow-xl rounder-lg my-10"}>
-  <figure className="mt-2">
-    <img
+      <div className={"card bg-base-300 w-1/4 shadow-xl rounded-lg self-start h-auto items-center"}>
+  <figure className="rounded-2xl">
+    <img className="rounded-2xl w-full"
       src={photoURL}
       alt="user-photo" />
   </figure>
-  <div className="card-body items-center break-words overflow-hidden">
-    <h2 className="card-title break-words overflow-hidden">{firstName+" "+lastName}</h2>
+  <div className="card-body break-words whitespace-normal w-full max-w-xs">
+    <h2 className="card-title break-all whitespace-normal w-full max-w-xs">{firstName+" "+lastName}</h2>
     <p>
       {age && <span>{age+","}</span>}
-      {gender && <span>{gender}</span>}
+      {gender && !(gender.toString()==="Select your gender") && <span className="text-capitalize">{gender}</span>}
     </p>
-    <p className="break-words overflow-hidden">{about}</p>
+    <p className="break-words whitespace-normal w-full">{about}</p>
     {_id &&<div className="card-actions mt-3">
           <button className="btn btn-primary text-2xl px-3 py-2 mx-3 rounded-lg"
            onClick={()=>{handleInvitation("ignored")}}>Ignore</button>
