@@ -11,6 +11,8 @@ const Feed = function(){
      //console.log(feedData);
      
     const getFeedData = async function(){
+        console.log(BASE_URL);
+        
         const feedData = await axios.get(BASE_URL+"/user/feed",{withCredentials:true});
        // console.log(feedData?.data?.data);
         dispatch(addFeed(feedData?.data?.data));
