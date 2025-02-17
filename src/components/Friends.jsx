@@ -8,6 +8,7 @@ import {addConnections} from "../utlis/connectionSlice"
 
 
 
+
 const Friends = function(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -27,6 +28,10 @@ const Friends = function(){
         }
     }
 
+    const goToChatRoom = function(id){
+      navigate("/chatroom/"+id);
+    }
+
    useEffect(()=>{
      getFriendList();
    },[])
@@ -34,7 +39,7 @@ const Friends = function(){
     return (
     <div className="flex flex-col items-center">
        {friendLists.length && friendLists.map((friend)=>{
-        return <FriendProfileCard key={friend._id} userInfo={friend}/>
+        return <FriendProfileCard key={friend._id} userInfo={friend} goToChatRoom={goToChatRoom}/>
        })}
     </div>
     )

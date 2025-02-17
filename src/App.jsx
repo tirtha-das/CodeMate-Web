@@ -8,6 +8,7 @@ import Feed from "./components/Feed.jsx";
 import Error from "./components/Error.jsx"
 import appStore from "./utlis/appStore.js"
 import { Provider } from "react-redux"
+import ChatRoom from "./components/ChatRoom.jsx"
 
 function App() {
   
@@ -22,6 +23,7 @@ function App() {
        <Route path="/" element={<Feed/>}/>
        <Route path="/friends" element={<Friends/>}/>
        <Route path="/pendingRequest" element={<PendingRequest/>}/>
+       <Route path="/chatroom/:toUserId" element={<ChatRoom/>}/>
        <Route path="/error" element={<Error/>}/>
       </Route>
      </Routes>

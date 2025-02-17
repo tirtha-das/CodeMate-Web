@@ -7,7 +7,8 @@ const connectionSlice = createSlice({
     reducers:{
         addConnections:function(state,action){
             return action.payload;
-        }
+        },
+        
     }
 })
 

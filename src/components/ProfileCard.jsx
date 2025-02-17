@@ -59,14 +59,17 @@ export const WrappedPendingProfile = (ProfileCard) => {
 
 export const WrappedFriendProfile=(ProfileCard)=>{
  return (props)=>{
-   // const {userInfo} = props;
+   const {userInfo,goToChatRoom} = props;
     //console.log(userInfo);
     
     return (
       <div className="flex w-1/2 items-center bg-base-300 rounded-2xl justify-around my-3">
         <ProfileCard {...props}/>
         <div className="card-actions mx-3">
-           <button className="btn btn-secondary text-xl font-bold">Chat</button>
+           <button className="btn btn-secondary text-xl font-bold"
+            onClick={()=>{
+              goToChatRoom(userInfo._id);
+            }}>Chat</button>
            <button className="btn btn-primary text-xl font-bold">Block</button>
          </div>
       </div>
