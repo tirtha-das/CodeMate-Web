@@ -1,4 +1,7 @@
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utlis/constant";
+import { useState } from "react";
 
 
 const ProfileCard = function({userInfo}){
@@ -59,7 +62,19 @@ export const WrappedPendingProfile = (ProfileCard) => {
 
 export const WrappedFriendProfile=(ProfileCard)=>{
  return (props)=>{
-   const {userInfo,goToChatRoom} = props;
+   const {userInfo,goToChatRoom,loggedInUser} = props;
+   const navigate = useNavigate();
+   //const [status,setStatus] = useState("Block")
+
+   const handelProfileReviewRequest = async(status)=>{
+      try{
+         await axios.patch(BASE_URL+"/request/profilereview/"+status+"/"+userInfo._id,{},{withCreadentials:true});
+
+      }catch(err){
+        console.error(err.message);
+        navigate("/error");
+      }
+   }
     //console.log(userInfo);
     
     return (
@@ -70,7 +85,12 @@ export const WrappedFriendProfile=(ProfileCard)=>{
             onClick={()=>{
               goToChatRoom(userInfo._id);
             }}>Chat</button>
-           <button className="btn btn-primary text-xl font-bold">Block</button>
+           <button className="btn btn-primary text-xl font-bold"
+             onClick={()=>{
+                (!userInfo.blockedBy.includes(loggedInUser._id))?handelProfileReviewRequest("blocked"):handelProfileReviewRequest("unblocked");
+             }}
+           >{
+            (!userInfo.blockedBy.includes(loggedInUser._id))?"Block":"Unblock"}</button>
          </div>
       </div>
     )

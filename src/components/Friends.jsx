@@ -13,6 +13,7 @@ const Friends = function(){
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const friendLists = useSelector(store=>store.connections);
+    const loggedInUser = useSelector(store=>store.user);
     const FriendProfileCard = WrappedFriendProfile(ProfileCard);
 
     const getFriendList = async function(){
@@ -39,7 +40,7 @@ const Friends = function(){
     return (
     <div className="flex flex-col items-center">
        {friendLists.length && friendLists.map((friend)=>{
-        return <FriendProfileCard key={friend._id} userInfo={friend} goToChatRoom={goToChatRoom}/>
+        return <FriendProfileCard key={friend._id} userInfo={friend} goToChatRoom={goToChatRoom} loggedInUser={loggedInUser}/>
        })}
     </div>
     )
