@@ -54,7 +54,7 @@ const  PendingRequest = function(){
     return (
     <div className="flex flex-col items-center">
        {pendingRequestLists.length && pendingRequestLists.map((user)=>{
-        return <PendingProfileCard key={user._id} userInfo={user} handleReviewRequest={handleReviewRequest} />
+        return <PendingProfileCard key={user._id} toUserInfo={user} handleReviewRequest={handleReviewRequest} />
        })}
     </div>
     )

@@ -40,7 +40,7 @@ const Friends = function(){
     return (
     <div className="flex flex-col items-center">
        {friendLists.length && friendLists.map((friend)=>{
-        return <FriendProfileCard key={friend._id} userInfo={friend} goToChatRoom={goToChatRoom} loggedInUser={loggedInUser}/>
+        return <FriendProfileCard key={friend._id} toUserInfo={friend} goToChatRoom={goToChatRoom} loggedInUser={loggedInUser}/>
        })}
     </div>
     )
