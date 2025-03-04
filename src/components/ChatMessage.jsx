@@ -1,8 +1,13 @@
+import { useSelector } from "react-redux";
 
 
-const ChatMessage = ()=>{
+const ChatMessage = ({messageInfo})=>{
+  const loggedInUser = useSelector((store)=>store.user)
+  const {fromUserId,firstName,text} = messageInfo;
+  const isSenderMe = (loggedInUser._id.toString()===fromUserId.toString);
+
   return (
-    <div className="chat chat-start">
+    <div className={"chat "+(!isSenderMe)?"chat-start":"chat-end"}>
   <div className="chat-image avatar">
     <div className="w-10 rounded-full">
       <img
@@ -11,10 +16,10 @@ const ChatMessage = ()=>{
     </div>
   </div>
   <div className="chat-header">
-    Obi-Wan Kenobi
+    {firstName}
     <time className="text-xs opacity-50">12:45</time>
   </div>
-  <div className="chat-bubble">You were the Chosen One!</div>
+  <div className="chat-bubble">{text}</div>
   <div className="chat-footer opacity-50">Delivered</div>
 </div>
 

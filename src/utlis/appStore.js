@@ -3,6 +3,7 @@ import userSliceReducer from "./userSlice"
 import feedSliceReducer from "./feedSlice";
 import connectionSliceReducer from "./connectionSlice";
 import requestSliceReducer from "./requestSlice";
+import chatSliceReducer from "./chatSlice";
 
 
 
@@ -11,7 +12,8 @@ const appStore = configureStore({
        user:userSliceReducer,
        feed:feedSliceReducer,
        connections:connectionSliceReducer,
-       requests:requestSliceReducer
+       requests:requestSliceReducer,
+       chat:chatSliceReducer
     }
 });
 

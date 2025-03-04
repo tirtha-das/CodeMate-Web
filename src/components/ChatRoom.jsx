@@ -1,24 +1,33 @@
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../utlis/constant";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import ChatMessage from "./chatMessage";
+import { createSocketConnection } from "../utlis/socket"
+import { useDispatch, useSelector } from "react-redux";
+import { addNewMessage } from "../utlis/chatSlice";
 
 
 const ChatRoom = ()=>{
     const {toUserId} = useParams();
+    const loggedInUser = useSelector((Store)=>Store.user);
+    const loggedInUserId = loggedInUser?._id;
     const navigate = useNavigate();
-    const [userFirstName,setUserFirstName] = useState("");
-    const [userlastName,setUserLastName] = useState("");
-    const [userphotoURL,setUserPhotoURL] = useState("");
-    
+    const [toUserFirstName,setToUserFirstName] = useState("");
+    const [toUserlastName,setToUserLastName] = useState("");
+    const [toUserphotoURL,setToUserPhotoURL] = useState("");
+    const[messages,setMessages] = useState([]);
+    const [newMessage,setNewMessage] = useState("");
+    const socket = useRef(null);
+    const disPatch = useDispatch();
+    const getNewMessage = useSelector((store)=>store.chat.newMessage);
     const getUserData = async function(){
         try{
         const response = await axios.get(BASE_URL+"/user/details/"+toUserId,{withCredentials:true});
         const {firstName,lastName,photoURL} = response?.data?.data[0];
-        setUserFirstName(firstName);
-        setUserLastName(lastName);
-        setUserPhotoURL(photoURL);
+        setToUserFirstName(firstName);
+        setToUserLastName(lastName);
+        setToUserPhotoURL(photoURL);
         
         }
         catch(err){
@@ -30,6 +39,44 @@ const ChatRoom = ()=>{
     useEffect(()=>{
         getUserData();
     },[])
+
+    useEffect(()=>{
+       if(!loggedInUserId) return;
+
+       socket.current = createSocketConnection();
+      socket.current.emit("joinChat",{userId:loggedInUserId,toUserId});
+
+      socket.current.on("messageReceived",({fromUserId,firstName,text})=>{
+        console.log(firstName+" : "+text);
+        console.log("ato ta obhdhi kaj korche");
+        disPatch(addNewMessage({fromUserId,firstName,text}));
+
+        
+        setMessages((messages)=>{
+         //console.log("size of prev :"+prev.length); 
+         const updatedMessage  =  [...messages,getNewMessage]
+         console.log("size of updatedMessage :"+updatedMessage.length); 
+          return updatedMessage;
+       });
+        console.log(messages);
+      
+      })
+
+      return ()=>{
+        socket.current.disconnect();
+      }
+    },[loggedInUserId,toUserId]);
+
+    
+
+    const sendNewMessage = ()=>{
+      if(!socket.current) return ;
+
+      //const socket = createSocketConnection();
+      socket.current.emit("sendMessage",{userId:loggedInUser._id,toUserId,firstName:loggedInUser.firstName,text:newMessage})
+      setNewMessage("");
+      // socket.disconnect();
+    }
      
     
     return (
@@ -37,20 +84,27 @@ const ChatRoom = ()=>{
         <div className="card bg-base-200 w-96 shadow-xl rounded-2xl ">
           <div className="card-header flex bg-base-300 p-3 border border-amber-50">
             <img
-             src={userphotoURL || "https://cdn-icons-png.flaticon.com/256/9572/9572778.png"} className="h-20 w-20 rounded-full mx-2"
+             src={toUserphotoURL || "https://cdn-icons-png.flaticon.com/256/9572/9572778.png"} className="h-20 w-20 rounded-full mx-2"
              alt="User-Photo" />
-             <h2 className="card-title">{userFirstName+" "+userlastName}</h2>
+             <h2 className="card-title">{toUserFirstName+" "+toUserlastName}</h2>
            
           </div>
           <div className="border border-amber-50 h-96">
-            <ChatMessage/>
+           {messages.map((msg,idx)=>{
+            <ChatMessage key={idx} messageInfo={msg}/>
+           })} 
           </div>
           <div className="border border-amber-50 h-20 flex items-center">
           <input
             type="text"
              placeholder="Type here"
-            className="input input-bordered input-secondary mx-2 max-w-xs" />
-            <button className="btn btn-accent mr-2">Send</button>
+            className="input input-bordered input-secondary mx-2 max-w-xs"
+            value={newMessage} onChange={(event)=>
+            {setNewMessage(event.target.value)}} />
+            <button className="btn btn-accent mr-2"
+            onClick={()=>{
+              sendNewMessage();
+            }}>Send</button>
           </div>
          </div>
          </div>
