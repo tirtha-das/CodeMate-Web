@@ -18,7 +18,7 @@ const ChatRoom = ()=>{
     const [toUserphotoURL,setToUserPhotoURL] = useState("");
     const[messages,setMessages] = useState([]);
     const [newMessage,setNewMessage] = useState("");
-    const socket = useRef(null);
+     const socket = useRef(null);
     const disPatch = useDispatch();
     const getNewMessage = useSelector((store)=>store.chat.newMessage);
     const getUserData = async function(){
@@ -43,22 +43,20 @@ const ChatRoom = ()=>{
     useEffect(()=>{
        if(!loggedInUserId) return;
 
-       socket.current = createSocketConnection();
+        socket.current = createSocketConnection();
       socket.current.emit("joinChat",{userId:loggedInUserId,toUserId});
 
       socket.current.on("messageReceived",({fromUserId,firstName,text})=>{
         console.log(firstName+" : "+text);
         console.log("ato ta obhdhi kaj korche");
-        disPatch(addNewMessage({fromUserId,firstName,text}));
+        //disPatch(addNewMessage({fromUserId,firstName,text}));
 
         
-        setMessages((messages)=>{
-         //console.log("size of prev :"+prev.length); 
-         const updatedMessage  =  [...messages,getNewMessage]
-         console.log("size of updatedMessage :"+updatedMessage.length); 
-          return updatedMessage;
+        setMessages((prevMessages)=>{
+        const updatedMessage  =  [...prevMessages,{fromUserId,firstName,text}]
+        return updatedMessage;
        });
-        console.log(messages);
+       // console.log(messages);
       
       })
 
@@ -67,12 +65,13 @@ const ChatRoom = ()=>{
       }
     },[loggedInUserId,toUserId]);
 
+    //console.log(messages);
     
 
     const sendNewMessage = ()=>{
       if(!socket.current) return ;
 
-      //const socket = createSocketConnection();
+     // const socket = createSocketConnection();
       socket.current.emit("sendMessage",{userId:loggedInUser._id,toUserId,firstName:loggedInUser.firstName,text:newMessage})
       setNewMessage("");
       // socket.disconnect();
@@ -90,8 +89,10 @@ const ChatRoom = ()=>{
            
           </div>
           <div className="border border-amber-50 h-96">
-           {messages.map((msg,idx)=>{
-            <ChatMessage key={idx} messageInfo={msg}/>
+           {messages.length && messages.map((msg,idx)=>{
+            //console.log(msg);
+            
+            return <ChatMessage key={idx} messageInfo={msg}/>
            })} 
           </div>
           <div className="border border-amber-50 h-20 flex items-center">

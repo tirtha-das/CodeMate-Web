@@ -2,12 +2,17 @@ import { useSelector } from "react-redux";
 
 
 const ChatMessage = ({messageInfo})=>{
+ // console.log(messageInfo);
+  
   const loggedInUser = useSelector((store)=>store.user)
   const {fromUserId,firstName,text} = messageInfo;
-  const isSenderMe = (loggedInUser._id.toString()===fromUserId.toString);
+  const isSenderMe = (loggedInUser._id.toString()===fromUserId.toString());
+  //console.log(isSenderMe);
+  
 
   return (
-    <div className={"chat "+(!isSenderMe)?"chat-start":"chat-end"}>
+    <div className="mx-3 mt-1">
+    <div className={"chat "+(!isSenderMe?"chat-start":"chat-end")}>
   <div className="chat-image avatar">
     <div className="w-10 rounded-full">
       <img
@@ -21,6 +26,7 @@ const ChatMessage = ({messageInfo})=>{
   </div>
   <div className="chat-bubble">{text}</div>
   <div className="chat-footer opacity-50">Delivered</div>
+</div>
 </div>
 
   )
