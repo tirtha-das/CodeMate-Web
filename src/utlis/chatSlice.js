@@ -3,18 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 const chatSlice = createSlice({
     name:"chat",
     initialState:{
-        newMessage:{},
-        prevMessages:[]
+       // newMessage:{},
+        pastMessages:[]
     },
     reducers:{
-        addNewMessage: function(state,action){
-            state.newMessage = action.payload;
+        addPastMessages: function(state,action){
+            state.pastMessages = action.payload;
         }
     }
 
 })
 
 
-export const {addNewMessage} = chatSlice.actions;
+export const {addPastMessages} = chatSlice.actions;
 
 export default chatSlice.reducer;

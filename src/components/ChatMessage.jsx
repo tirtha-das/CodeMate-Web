@@ -2,14 +2,18 @@ import { useSelector } from "react-redux";
 
 
 const ChatMessage = ({messageInfo})=>{
- // console.log(messageInfo);
+  //console.log(messageInfo);
+
+ 
   
   const loggedInUser = useSelector((store)=>store.user)
   const {fromUserId,firstName,text} = messageInfo;
+  //console.log(fromUserId+" "+firstName+" "+text);
+  
   const isSenderMe = (loggedInUser._id.toString()===fromUserId.toString());
   //console.log(isSenderMe);
+    
   
-
   return (
     <div className="mx-3 mt-1">
     <div className={"chat "+(!isSenderMe?"chat-start":"chat-end")}>

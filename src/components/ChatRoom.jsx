@@ -5,7 +5,7 @@ import { useEffect, useState, useRef} from "react";
 import ChatMessage from "./chatMessage";
 import { createSocketConnection } from "../utlis/socket"
 import { useDispatch, useSelector } from "react-redux";
-import { addNewMessage } from "../utlis/chatSlice";
+import { addPastMessages } from "../utlis/chatSlice";
 
 
 const ChatRoom = ()=>{
@@ -20,7 +20,9 @@ const ChatRoom = ()=>{
     const [newMessage,setNewMessage] = useState("");
      const socket = useRef(null);
     const disPatch = useDispatch();
-    const getNewMessage = useSelector((store)=>store.chat.newMessage);
+    const pastMessages = useSelector((store)=>store.chat.pastMessages);
+    const chatRef = useRef(null);
+
     const getUserData = async function(){
         try{
         const response = await axios.get(BASE_URL+"/user/details/"+toUserId,{withCredentials:true});
@@ -36,8 +38,24 @@ const ChatRoom = ()=>{
         }
     }
 
+    const getPreviousChat = async function(){
+       const response = await axios.get(BASE_URL+"/chat/"+toUserId,{withCredentials:true});
+       //console.log(response?.data?.data);
+      //  if(!messages.length){
+      //  setMessages((prevMessages)=>{
+      //   const updatedMessage  =  [...prevMessages,...response?.data?.data]
+      //   return updatedMessage;
+      //  });
+      // }
+       disPatch(addPastMessages(response?.data?.data));
+    };
+
     useEffect(()=>{
         getUserData();
+    },[])
+
+    useEffect(()=>{
+      getPreviousChat();
     },[])
 
     useEffect(()=>{
@@ -47,8 +65,8 @@ const ChatRoom = ()=>{
       socket.current.emit("joinChat",{userId:loggedInUserId,toUserId});
 
       socket.current.on("messageReceived",({fromUserId,firstName,text})=>{
-        console.log(firstName+" : "+text);
-        console.log("ato ta obhdhi kaj korche");
+       // console.log(firstName+" : "+text);
+        //console.log("ato ta obhdhi kaj korche");
         //disPatch(addNewMessage({fromUserId,firstName,text}));
 
         
@@ -65,6 +83,13 @@ const ChatRoom = ()=>{
       }
     },[loggedInUserId,toUserId]);
 
+    useEffect(()=>{
+       chatRef.current.scrollTo({
+        top:chatRef.current.scrollHeight,
+        behaviour:"smooth"
+       })
+    },[messages,pastMessages])
+
     //console.log(messages);
     
 
@@ -77,6 +102,7 @@ const ChatRoom = ()=>{
       // socket.disconnect();
     }
      
+    //console.log(pastMessages);
     
     return (
         <div className="flex justify-center">
@@ -88,9 +114,14 @@ const ChatRoom = ()=>{
              <h2 className="card-title">{toUserFirstName+" "+toUserlastName}</h2>
            
           </div>
-          <div className="border border-amber-50 h-96">
-           {messages.length && messages.map((msg,idx)=>{
+          <div ref={chatRef} className="border border-amber-50 h-96 overflow overflow-y-scroll">
+          { pastMessages?.length>0 && pastMessages.map((msg,idx)=>{
             //console.log(msg);
+            
+            return <ChatMessage key={idx} messageInfo={msg}/>
+           })}
+           {messages?.length>0 && messages.map((msg,idx)=>{
+            // console.log(msg);
             
             return <ChatMessage key={idx} messageInfo={msg}/>
            })} 
