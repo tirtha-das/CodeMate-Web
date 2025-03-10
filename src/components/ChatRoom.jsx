@@ -63,6 +63,11 @@ const ChatRoom = ()=>{
 
         socket.current = createSocketConnection();
       socket.current.emit("joinChat",{userId:loggedInUserId,toUserId});
+      socket.current.on("connect_error", (err) => {
+        
+        console.log(err.message); // not authorized
+        //console.log(err.data); // { content: "Please retry later" }
+      });
 
       socket.current.on("messageReceived",({fromUserId,firstName,text})=>{
        // console.log(firstName+" : "+text);

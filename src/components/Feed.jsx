@@ -6,12 +6,19 @@ import { addFeed } from "../utlis/feedSlice";
 import UserCard from "./UserCard";
 
 const Feed = function(){
+
     const dispatch = useDispatch();
      const feedData = useSelector((store)=>store.feed);
+
+     
      //console.log(feedData);
      
     const getFeedData = async function(){
         //console.log(BASE_URL);
+
+        // const token = document.cookie.split("=");
+        // console.log(token[0]+" : "+token[1]);
+        
         
         const feedData = await axios.get(BASE_URL+"/user/feed",{withCredentials:true});
        // console.log(feedData?.data?.data);
