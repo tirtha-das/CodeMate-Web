@@ -25,7 +25,15 @@ const ChatRoom = ()=>{
 
     const getUserData = async function(){
         try{
+         // console.log(toUserId);
+          
         const response = await axios.get(BASE_URL+"/user/details/"+toUserId,{withCredentials:true});
+        //console.log(response?.data?.data.length);
+        if(response?.data?.data.length===0){
+          navigate("/friends");
+          return;
+        }
+        
         const {firstName,lastName,photoURL} = response?.data?.data[0];
         setToUserFirstName(firstName);
         setToUserLastName(lastName);
@@ -59,15 +67,17 @@ const ChatRoom = ()=>{
     },[])
 
     useEffect(()=>{
-       if(!loggedInUserId) return;
+       if(!loggedInUserId || toUserFirstName.length===0) return;
 
         socket.current = createSocketConnection();
       socket.current.emit("joinChat",{userId:loggedInUserId,toUserId});
       socket.current.on("connect_error", (err) => {
-        
-        console.log(err.message); // not authorized
+       console.error(err.message); // not authorized
         //console.log(err.data); // { content: "Please retry later" }
       });
+      socket.current.on("notFriend",({err})=>{
+        navigate("/friends");
+      })
 
       socket.current.on("messageReceived",({fromUserId,firstName,text})=>{
        // console.log(firstName+" : "+text);

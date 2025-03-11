@@ -10,7 +10,7 @@ const ChatMessage = ({messageInfo})=>{
   const {fromUserId,firstName,text} = messageInfo;
   //console.log(fromUserId+" "+firstName+" "+text);
   
-  const isSenderMe = (loggedInUser._id.toString()===fromUserId.toString());
+  const isSenderMe = (loggedInUser?._id.toString()===fromUserId?.toString());
   //console.log(isSenderMe);
     
   

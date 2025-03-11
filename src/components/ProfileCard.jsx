@@ -82,10 +82,15 @@ export const WrappedFriendProfile=(ProfileCard)=>{
     //lastTimeClicked.current  = now;
       try{
          await axios.patch(BASE_URL+"/request/profilereview/"+status+"/"+toUserInfo._id,{},{withCredentials:true});
-         SetIsBlocked( (prev)=>!prev);
-         
+        
+         SetIsButtonDisable((prev)=>!prev);
+        //  console.log(isBlocked);
+        //   console.log(isButtonDisable);
          setTimeout(()=>{
+          SetIsBlocked( (prev)=>!prev);
           SetIsButtonDisable((prev)=>!prev);
+          // console.log(isBlocked);
+          // console.log(isButtonDisable);
          },2000)
          
       }catch(err){
@@ -94,6 +99,11 @@ export const WrappedFriendProfile=(ProfileCard)=>{
       }
    }
     //console.log(userInfo);
+    // console.log(isBlocked);
+    // console.log(isButtonDisable);
+    
+
+    
     
     return (
       <div className="flex w-1/2 items-center bg-base-300 rounded-2xl justify-around my-3">
@@ -103,7 +113,8 @@ export const WrappedFriendProfile=(ProfileCard)=>{
             onClick={()=>{
               goToChatRoom(toUserInfo._id);
             }}>Chat</button>
-           <button className="btn btn-primary text-xl font-bold"
+           <button className={`btn btn-primary text-xl font-bold ${isButtonDisable ? "disabled:!pointer-events-none disabled:!cursor-not-allowed" : ""}`}
+           
              onClick={()=>{
                 (!isBlocked)?handelProfileReviewRequest("blocked"):handelProfileReviewRequest("unblocked");
              }}
