@@ -16,8 +16,11 @@ const ChatRoom = ()=>{
     const [toUserFirstName,setToUserFirstName] = useState("");
     const [toUserlastName,setToUserLastName] = useState("");
     const [toUserphotoURL,setToUserPhotoURL] = useState("");
+    const [blocked,setBlocked] = useState([]);
     const[messages,setMessages] = useState([]);
     const [newMessage,setNewMessage] = useState("");
+    const [showBlockToast,setShowBlockToast] = useState(false);
+    const [toastMessage,setToastMessage] = useState("");
      const socket = useRef(null);
     const disPatch = useDispatch();
     const pastMessages = useSelector((store)=>store.chat.pastMessages);
@@ -28,16 +31,17 @@ const ChatRoom = ()=>{
          // console.log(toUserId);
           
         const response = await axios.get(BASE_URL+"/user/details/"+toUserId,{withCredentials:true});
-        //console.log(response?.data?.data.length);
+        // console.log(response?.data?.data);
         if(response?.data?.data.length===0){
           navigate("/friends");
           return;
         }
         
-        const {firstName,lastName,photoURL} = response?.data?.data[0];
+        const {firstName,lastName,photoURL,blockedBy} = response?.data?.data[0];
         setToUserFirstName(firstName);
         setToUserLastName(lastName);
         setToUserPhotoURL(photoURL);
+        setBlocked(blockedBy);
         
         }
         catch(err){
@@ -110,6 +114,25 @@ const ChatRoom = ()=>{
 
     const sendNewMessage = ()=>{
       if(!socket.current) return ;
+      console.log(blocked.length);
+      
+      if(blocked.length!==0){
+        console.log("hello");
+        
+        setShowBlockToast(true);
+        setNewMessage("");
+        if(blocked.includes(loggedInUserId.toString())){
+          setToastMessage(`You Have blocked ${toUserFirstName}`);
+        }else{
+          setToastMessage(`${toUserFirstName} Have blocked you`);
+        }
+         setTimeout(()=>{
+          setToastMessage("");
+          setShowBlockToast(false);
+         },1700)
+         return;
+      }
+
 
      // const socket = createSocketConnection();
       socket.current.emit("sendMessage",{userId:loggedInUser._id,toUserId,firstName:loggedInUser.firstName,text:newMessage})
@@ -154,6 +177,12 @@ const ChatRoom = ()=>{
             }}>Send</button>
           </div>
          </div>
+         {showBlockToast && <div className="toast toast-top toast-center">
+  
+           <div className="alert alert-success">
+              <span>{toastMessage}</span>
+               </div>
+               </div>}
          </div>
     );
 }
