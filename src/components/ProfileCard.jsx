@@ -113,7 +113,7 @@ export const WrappedFriendProfile=(ProfileCard)=>{
             onClick={()=>{
               goToChatRoom(toUserInfo._id);
             }}>Chat</button>
-           <button className={`btn btn-primary text-xl font-bold ${isButtonDisable ? "disabled:!pointer-events-none disabled:!cursor-not-allowed" : ""}`}
+           <button className={`btn btn-primary text-xl font-bold ${isButtonDisable?"cursor-not-allowed":""}`}
            
              onClick={()=>{
                 (!isBlocked)?handelProfileReviewRequest("blocked"):handelProfileReviewRequest("unblocked");

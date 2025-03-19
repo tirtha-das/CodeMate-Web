@@ -31,7 +31,7 @@ const ChatRoom = ()=>{
          // console.log(toUserId);
           
         const response = await axios.get(BASE_URL+"/user/details/"+toUserId,{withCredentials:true});
-        // console.log(response?.data?.data);
+         //console.log(response?.data?.data[0]);
         if(response?.data?.data.length===0){
           navigate("/friends");
           return;
@@ -42,8 +42,7 @@ const ChatRoom = ()=>{
         setToUserLastName(lastName);
         setToUserPhotoURL(photoURL);
         setBlocked(blockedBy);
-        
-        }
+      }
         catch(err){
             console.log(err.message);
             navigate("/error");
@@ -64,18 +63,21 @@ const ChatRoom = ()=>{
 
     useEffect(()=>{
         getUserData();
-    },[])
+    },[toUserId])
 
     useEffect(()=>{
       getPreviousChat();
     },[])
 
     useEffect(()=>{
+      //console.log(loggedInUserId +" "+ toUserFirstName.length);
+      
        if(!loggedInUserId || toUserFirstName.length===0) return;
-
+          //console.log("hello");
+          
         socket.current = createSocketConnection();
       socket.current.emit("joinChat",{userId:loggedInUserId,toUserId});
-      socket.current.on("connect_error", (err) => {
+      socket.current.on("connect_error", ({err}) => {
        console.error(err.message); // not authorized
         //console.log(err.data); // { content: "Please retry later" }
       });
@@ -88,6 +90,7 @@ const ChatRoom = ()=>{
         //console.log("ato ta obhdhi kaj korche");
         //disPatch(addNewMessage({fromUserId,firstName,text}));
 
+        // console.log("messageReceived :"+text);
         
         setMessages((prevMessages)=>{
         const updatedMessage  =  [...prevMessages,{fromUserId,firstName,text}]
@@ -100,7 +103,7 @@ const ChatRoom = ()=>{
       return ()=>{
         socket.current.disconnect();
       }
-    },[loggedInUserId,toUserId]);
+    },[loggedInUserId,toUserId,toUserFirstName]);
 
     useEffect(()=>{
        chatRef.current.scrollTo({
@@ -113,11 +116,16 @@ const ChatRoom = ()=>{
     
 
     const sendNewMessage = ()=>{
-      if(!socket.current) return ;
-      console.log(blocked.length);
+      if(!socket.current) {
+        socket.current = createSocketConnection();
+      }
+      // console.log(newMessage);
+      // console.log(blocked.length);
+      // console.log(toUserFirstName);
+      
       
       if(blocked.length!==0){
-        console.log("hello");
+        //console.log("hello");
         
         setShowBlockToast(true);
         setNewMessage("");
@@ -133,7 +141,8 @@ const ChatRoom = ()=>{
          return;
       }
 
-
+      // console.log("hi");
+      
      // const socket = createSocketConnection();
       socket.current.emit("sendMessage",{userId:loggedInUser._id,toUserId,firstName:loggedInUser.firstName,text:newMessage})
       setNewMessage("");
@@ -177,9 +186,9 @@ const ChatRoom = ()=>{
             }}>Send</button>
           </div>
          </div>
-         {showBlockToast && <div className="toast toast-top toast-center">
+         {showBlockToast && <div className="toast toast-top toast-center text-center">
   
-           <div className="alert alert-success">
+           <div className="alert alert-error text-center">
               <span>{toastMessage}</span>
                </div>
                </div>}
