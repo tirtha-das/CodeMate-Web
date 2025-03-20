@@ -35,8 +35,30 @@ const Body = function(){
         
     }
 
+    const handleLogout = async()=>{
+      try{
+        axios.post(BASE_URL+"/logout",{},{withCredentials:true});
+      }catch(err){
+        navigate("/error");
+      }
+    }
+
     useEffect(()=>{
         isUserLoggedIn();
+    },[])
+
+    useEffect(()=>{
+        window.addEventListener("beforeunload",(event)=>{
+            handleLogout();
+        })
+
+
+
+        return ()=>{
+          window.removeEventListener("beforeunload",(event)=>{
+            handleLogout();
+          })
+        }
     },[])
 
     return (
