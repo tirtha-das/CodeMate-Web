@@ -21,6 +21,7 @@ const ChatRoom = ()=>{
     const [newMessage,setNewMessage] = useState("");
     const [showBlockToast,setShowBlockToast] = useState(false);
     const [toastMessage,setToastMessage] = useState("");
+    const [isToUserOnline,setIsToUserOnline] = useState(false);
      const socket = useRef(null);
     const disPatch = useDispatch();
     const pastMessages = useSelector((store)=>store.chat.pastMessages);
@@ -83,6 +84,14 @@ const ChatRoom = ()=>{
       });
       socket.current.on("notFriend",({err})=>{
         navigate("/friends");
+      })
+
+      socket.current.on("updateUserStatus",({userId,onlineStatus})=>{
+         console.log(userId);
+         
+        if(userId.toString()===toUserId.toString()){
+          setIsToUserOnline(onlineStatus);
+        } 
       })
 
       socket.current.on("messageReceived",({fromUserId,firstName,text})=>{
@@ -159,7 +168,7 @@ const ChatRoom = ()=>{
              src={toUserphotoURL || "https://cdn-icons-png.flaticon.com/256/9572/9572778.png"} className="h-20 w-20 rounded-full mx-2"
              alt="User-Photo" />
              <h2 className="card-title">{toUserFirstName+" "+toUserlastName}</h2>
-           
+             {blocked?.length===0 && isToUserOnline && <h2>Online</h2> }
           </div>
           <div ref={chatRef} className="border border-amber-50 h-96 overflow overflow-y-scroll">
           { pastMessages?.length>0 && pastMessages.map((msg,idx)=>{

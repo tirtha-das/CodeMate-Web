@@ -3,13 +3,16 @@ import { BASE_URL } from "../utlis/constant";
 import Navbar from "./Navbar";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios"
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import { addUser } from "../utlis/userSlice";
+import { createSocketConnection } from "../utlis/socket";
+
 
 const Body = function(){
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+    const loggedInUser = useSelector((store)=>store.user);
 
     const isUserLoggedIn = async function(){
         try{
@@ -47,19 +50,35 @@ const Body = function(){
         isUserLoggedIn();
     },[])
 
-    useEffect(()=>{
-        window.addEventListener("beforeunload",(event)=>{
-            handleLogout();
-        })
+    // useEffect(()=>{
+    //     window.addEventListener("beforeunload",(event)=>{
+    //         handleLogout();
+    //     })
+        
 
+    //     return ()=>{
+    //       //socket.disconnect();
+    //       window.removeEventListener("beforeunload",(event)=>{
+    //         handleLogout();
+    //       })
+    //     }
+    // },[])
+
+    useEffect(()=>{
+      //console.log(loggedInUser);
+      
+      if(!loggedInUser) return ;
+      const socket = createSocketConnection();
+        socket.emit("userOnline",{userId:loggedInUser._id});
 
 
         return ()=>{
-          window.removeEventListener("beforeunload",(event)=>{
-            handleLogout();
-          })
+          socket.disconnect();
         }
-    },[])
+
+    },[loggedInUser])
+
+
 
     return (
         <>
