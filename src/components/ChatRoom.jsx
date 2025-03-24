@@ -38,11 +38,12 @@ const ChatRoom = ()=>{
           return;
         }
         
-        const {firstName,lastName,photoURL,blockedBy} = response?.data?.data[0];
+        const {firstName,lastName,photoURL,blockedBy,isOnline} = response?.data?.data[0];
         setToUserFirstName(firstName);
         setToUserLastName(lastName);
         setToUserPhotoURL(photoURL);
         setBlocked(blockedBy);
+        setIsToUserOnline(isOnline);
       }
         catch(err){
             console.log(err.message);
@@ -87,11 +88,19 @@ const ChatRoom = ()=>{
       })
 
       socket.current.on("updateUserStatus",({userId,onlineStatus})=>{
-         console.log(userId);
+          console.log(userId +" "+onlineStatus);
          
         if(userId.toString()===toUserId.toString()){
           setIsToUserOnline(onlineStatus);
         } 
+        //  console.log(onlineUsersTraker);
+        //  console.log(typeof onlineUsersTraker);
+        //  console.log(onlineUsersTraker instanceof Map);
+         
+        //  if(onlineUsersTraker.hasOwnProperty(toUserId.toString())){
+        //   setIsToUserOnline(onlineStatus);
+        //  }
+         
       })
 
       socket.current.on("messageReceived",({fromUserId,firstName,text})=>{
