@@ -55,6 +55,7 @@ const Navbar = function(){
               <li><Link to="/profile">Profile</Link></li>
               <li><Link to="/pendingRequest">Pending Requests</Link></li>
               <li><Link to="/friends">Friends</Link></li>
+              <li><Link to="/groupList">Groups</Link></li>
               <li><a onClick={handleLogout}>Logout</a></li>
             </ul>
           </div>

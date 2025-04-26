@@ -127,6 +127,11 @@ export const WrappedFriendProfile=(ProfileCard)=>{
   
 }
 
+export const WrappedGroupMemberProfile = (ProfileCard)=>{
+  return (props)=>{
+    return (<ProfileCard {...props}/>)
+  }
+}
 
 
 

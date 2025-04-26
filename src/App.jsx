@@ -9,6 +9,8 @@ import Error from "./components/Error.jsx"
 import appStore from "./utlis/appStore.js"
 import { Provider } from "react-redux"
 import ChatRoom from "./components/ChatRoom.jsx"
+import GroupList from "./components/GroupList.jsx"
+import CreateGroup from "./components/CreateGroup.jsx"
 
 function App() {
   
@@ -24,6 +26,8 @@ function App() {
        <Route path="/friends" element={<Friends/>}/>
        <Route path="/pendingRequest" element={<PendingRequest/>}/>
        <Route path="/chatroom/:toUserId" element={<ChatRoom/>}/>
+       <Route path="/groupList" element={<GroupList/>}/>
+       <Route path="/createGroup" element={<CreateGroup/>}/>
        <Route path="/error" element={<Error/>}/>
       </Route>
      </Routes>
