@@ -129,10 +129,31 @@ export const WrappedFriendProfile=(ProfileCard)=>{
 
 export const WrappedGroupMemberProfile = (ProfileCard)=>{
   return (props)=>{
-    return (<ProfileCard {...props}/>)
+    //const [selectedCard,setSelectedCard] = useState(false);
+    const {handleInsert,handleRemove,toUserInfo,selectedCard} = props;
+    //console.log(toUserInfo);
+   // console.log(uniqueFriends);
+    
+    
+    return (<div className="flex items-center"> 
+    <ProfileCard {...props}/>
+    
+     <button className="btn btn-success" onClick={()=>{
+      if(!selectedCard){
+        handleInsert(toUserInfo._id);
+      }
+      else{
+        handleRemove(toUserInfo._id);
+      }
+      //setSelectedCard((prevstate)=>{ 
+       // return !prevstate
+     // });
+       console.log(selectedCard);
+       
+     }}>{!selectedCard?"Select":"Remove"}</button>
+    </div>
+   )}
   }
-}
-
 
 
 
