@@ -129,10 +129,9 @@ export const WrappedFriendProfile=(ProfileCard)=>{
 
 export const WrappedGroupMemberProfile = (ProfileCard)=>{
   return (props)=>{
-    //const [selectedCard,setSelectedCard] = useState(false);
+   
     const {handleInsert,handleRemove,toUserInfo,selectedCard} = props;
-    //console.log(toUserInfo);
-   // console.log(uniqueFriends);
+   
     
     
     return (<div className="flex items-center"> 
@@ -145,10 +144,7 @@ export const WrappedGroupMemberProfile = (ProfileCard)=>{
       else{
         handleRemove(toUserInfo._id);
       }
-      //setSelectedCard((prevstate)=>{ 
-       // return !prevstate
-     // });
-       console.log(selectedCard);
+      
        
      }}>{!selectedCard?"Select":"Remove"}</button>
     </div>
